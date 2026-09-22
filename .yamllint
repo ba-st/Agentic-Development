@@ -1,0 +1,21 @@
+---
+extends: default
+
+# Skip whatever git ignores: the working image, and the clones in repos/, which
+# belong to other projects and follow their own conventions.
+ignore-from-file: .gitignore
+
+rules:
+  # Long lines are allowed, matching MD013 in .markdownlint.json.
+  line-length: disable
+
+  # GitHub Actions workflows follow their own conventions: they conventionally
+  # omit the document start marker and use a bare `on:` key, which yamllint
+  # would otherwise read as the boolean `true`.
+  document-start:
+    present: true
+    ignore: |
+      .github/
+  truthy:
+    ignore: |
+      .github/

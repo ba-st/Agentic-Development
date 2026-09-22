@@ -1,0 +1,25 @@
+{
+  "name": "Buenos Aires Smalltalk Agentic Development",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "ba-st",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code",
+        "DavidAnson.vscode-markdownlint",
+        "mhutchie.git-graph",
+        "timonwong.shellcheck"
+      ],
+      "settings": {
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "initializeCommand": ["mkdir", "--parents", "${localWorkspaceFolder}/repos"],
+  "postCreateCommand": "create-pharo-image.sh && check-repositories.sh",
+  "remoteUser": "node"
+}

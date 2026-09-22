@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#
+# Open the working Pharo image in the Pharo IDE, drawing on the X server named
+# by DISPLAY. docs/how-to/develop-in-the-pharo-image.md covers the host side.
+
+set -euo pipefail
+
+if [[ -z ${DISPLAY:-} ]]; then
+  printf 'pharo-ui: DISPLAY is unset, so there is no X server to draw on.\n' >&2
+  printf 'See docs/how-to/develop-in-the-pharo-image.md.\n' >&2
+  exit 1
+fi
+
+# The container has no /dev/dri, so Mesa cannot create a DRI3 screen: without
+# this, window creation fails with "MESA: error: Failed to query drm device",
+# "glx: failed to create dri3 screen" and no window ever appears. Software
+# rasterising is ample for Morphic. Override it if /dev/dri is passed through.
+export LIBGL_ALWAYS_SOFTWARE="${LIBGL_ALWAYS_SOFTWARE:-1}"
+
+# The VM bundles SDL 2.24, which prefers Wayland when it can find it. Only the
+# X11 client libraries are installed, but saying so keeps the choice explicit
+# and leaves it overridable.
+export SDL_VIDEODRIVER="${SDL_VIDEODRIVER:-x11}"
+
+exec /opt/pharo/vm/pharo \
+  "${PHARO_IMAGE:-/workspace/pharo/Pharo.image}" "$@"
