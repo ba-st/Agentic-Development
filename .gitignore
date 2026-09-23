@@ -16,3 +16,4 @@ repos/
 # Left behind by running Pharo in the repository
 /*.log
 /*.fuel
+/logs/

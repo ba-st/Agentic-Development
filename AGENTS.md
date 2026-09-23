@@ -68,9 +68,10 @@ Things that are easy to get wrong:
   Buoy package; `pharo test "Buoy-*"` runs none and still exits successfully.
   Check the count in `Running tests in N Packages` before reporting a pass.
 - **Leftovers.** A failing test writes a `.fuel` file with its stack, and an
-  error writes `PharoDebug.log`, into the current directory. They are
-  gitignored at the repository root, but delete them once read, and do not run
-  Pharo from inside a project clone, where they are not ignored.
+  error writes `PharoDebug.log`, into the current directory. Some projects'
+  tests write too: Stargate's stack trace dumper tests leave dumps in `logs/`.
+  They are gitignored at the repository root, but delete them once read, and do
+  not run Pharo from inside a project clone, where they are not ignored.
 - **Saving.** `eval` and `test` leave the image unsaved unless given `--save`,
   but `metacello install` saves by default; pass `--no-save` to try a load
   without keeping it. Save the image only when the task calls for it.
