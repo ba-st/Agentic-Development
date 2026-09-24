@@ -80,7 +80,10 @@ Things that are easy to get wrong:
   `create-pharo-image.sh --force` gives a fresh one, and the project is loaded
   again. Say so before doing it, since whatever was only in the image is lost.
 - **One image at a time.** Two `pharo` processes on the same image race to save
-  it. Run Pharo commands one after another, never in parallel.
+  it. Run Pharo commands one after another, never in parallel. A `pharo-ui` the
+  human has open counts too: check with `pgrep -a pharo`, and if it has the
+  working image open, use a separate image (`PHARO_IMAGE_DIR` and
+  `PHARO_IMAGE`, as in step 5 below) instead.
 - **`pharo-ui` is for humans.** It needs a `DISPLAY` and opens a window an agent
   cannot see. Use the headless `pharo` for everything an agent runs.
 - **Failing loads.** If Metacello fails with
@@ -144,6 +147,12 @@ apply to every project. The parts that matter most when writing code:
 
 - Source code is in [Tonel](https://github.com/pharo-vcs/tonel) format in the
   `source/` folder.
+- Code is formatted with `BuenosAiresSmalltalkFormatter`, from Buoy's `Tools`
+  group. Every method you write or change must match its output exactly, not
+  the tab-indented layout of older methods around it; leave the methods you
+  don't touch as they are. The
+  [how-to](docs/how-to/develop-in-the-pharo-image.md#format-the-code) shows
+  how to format and check methods headless.
 - Test packages are named after the package under test with a `-Tests` suffix.
   Code without tests is unlikely to be merged.
 - Baselines define the `Deployment`, `Tests`, `Tools`,
@@ -164,6 +173,8 @@ Pharo, so do not assume code is portable just because the tests pass here.
   - `yamllint .`
 - For a Smalltalk change, the project's tests pass in a fresh image loaded from
   the commit with `gitlocal://`, and the run reports a non-zero package count.
+- Every method the change touches matches `BuenosAiresSmalltalkFormatter`'s
+  output.
 - If the change affects how the environment is built, set up or used, the docs
   and this file say so.
 

@@ -137,6 +137,40 @@ package that exists only on disk fails the load with
 is quietly not loaded. Use it to reproduce what CI sees; use `tonel://` while
 you are still working.
 
+### Format the code
+
+ba-st code is formatted with `BuenosAiresSmalltalkFormatter`, and code written
+by hand has to look exactly like its output, so it doesn't diverge from code
+formatted in the IDE. The formatter is in Buoy's `Buoy-Development-Tools`
+package, part of its `Tools` group, so a project loaded with
+`--groups=Development` brings it in. Loading it also makes it the image's
+default formatter, the one `RBProgramNode formatterClass` answers and the IDE's
+*Format* command uses. The pristine image doesn't have it.
+
+Many existing methods predate the formatter and are still indented with tabs.
+Don't copy their layout, and don't reformat them either: format only the
+methods your change touches, so the diff shows only your change.
+
+In the IDE, format each method you touch before accepting it. From the command
+line, load the working tree, then print how the formatter lays out a method:
+
+```bash
+pharo eval "RBProgramNode formatterClass new format: ( BaselineOfBuoy >> #baseline: ) ast"
+```
+
+The result is the method's full source, selector line included, with `CR` line
+endings. Tonel files use `LF`, and keep the selector on the
+`Class >> selector [` line, so only the lines after the selector go between the
+brackets. After writing the formatted code back and loading again, check that
+every method you touched is formatted. This answers the methods that still
+differ, and an empty array means all of them match:
+
+```bash
+pharo eval "{ BaselineOfBuoy >> #baseline: . BaselineOfBuoy >> #projectClass }
+  reject: [ :method |
+    ( RBProgramNode formatterClass new format: method ast ) = method sourceCode ]"
+```
+
 ### Load projects that depend on it
 
 Because clones are shared, a project you are working on is also the clone every
