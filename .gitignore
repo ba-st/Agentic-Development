@@ -1,0 +1,19 @@
+# Environment variables
+.devcontainer/.env
+
+# Claude Code local settings (per-machine overrides, not shared)
+.claude/settings.local.json
+.devcontainer/devcontainer-lock.json
+
+# Working Pharo image, created by .devcontainer/scripts/create-pharo-image.sh
+pharo/
+repos/
+
+# Working documents: the feature plan, and upstream issues waiting to be filed
+/PLAN.md
+/ISSUES.md
+
+# Left behind by running Pharo in the repository
+/*.log
+/*.fuel
+/logs/
